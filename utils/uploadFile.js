@@ -17,7 +17,7 @@ const multerStorage = multer.memoryStorage();
 
 // Allow only image file
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
+  if (file && file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
     cb(new Error("Please provide a valid image !"), false);

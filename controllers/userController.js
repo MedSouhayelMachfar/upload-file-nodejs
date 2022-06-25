@@ -7,8 +7,11 @@ const uploadUserImage = upload.single("photo");
 
 // Resizing user photo using the sharp package
 const resizeUserPhoto = (req, res, next) => {
-  if (!req.file) {
-    return next();
+  if (!req.file || !req.body.user_id) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Please provide a valid params!",
+    });
   }
   req.file.filename = `user-${req.body.user_id}-${Date.now()}.jpeg`;
   sharp(req.file.buffer)
@@ -16,11 +19,6 @@ const resizeUserPhoto = (req, res, next) => {
     .toFormat("jpeg")
     .jpeg({ quality: 90 })
     .toFile(`public/img/users/${req.file.filename}`);
-  next();
-};
-
-// Upload image using the photo patameter
-const uploadImage = (req, res, next) => {
   res.status(200).json({
     status: "success",
     image_name: req.file.filename,
@@ -29,13 +27,12 @@ const uploadImage = (req, res, next) => {
 
 // Return user image
 const getUserImage = function (req, res, next) {
-  const filePath = `/img/users/${req.params.imagename}`;
+  const filePath = `/img/users/${req.params.imageName}`;
   res.sendFile(filePath, { root: path.join(__dirname, "../public") });
 };
 
 module.exports = {
   uploadUserImage,
-  uploadImage,
   getUserImage,
   resizeUserPhoto,
 };

@@ -4,10 +4,9 @@ const userController = require("../controllers/userController.js");
 router.post(
   "/upload",
   userController.uploadUserImage,
-  userController.resizeUserPhoto,
-  userController.uploadImage
+  userController.resizeUserPhoto
 );
 
-router.get("/image/:imagename", userController.getUserImage);
+router.get("/image/:imageName", userController.getUserImage);
 
 module.exports = router;
